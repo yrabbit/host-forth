@@ -16,7 +16,7 @@
 
 /** Monitor commands */
 uint8_t const ReadByte  = 0x2cU;
-uint8_t const WriteByte = 0x44U;
+uint8_t const WriteByte = 0x40U;
 uint8_t const CallAddr  = 0x8U;
 
 /** sleep for msec miliseconds
