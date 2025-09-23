@@ -15,8 +15,8 @@
 #include <ficl.h>
 
 /** Monitor commands */
-uint8_t const ReadByte  = 0x2cU;
-uint8_t const WriteByte = 0x40U;
+uint8_t const ReadByte  = 0x24U;
+uint8_t const WriteByte = 0x38U;
 uint8_t const CallAddr  = 0x8U;
 
 /** sleep for msec miliseconds
@@ -129,8 +129,6 @@ void close_port(void) {
 //////////////////////////////////////
 /// xc@ ( a -- c )
 static void xc_at(ficlVm *vm) {
-    write(port_fd, &ReadByte, 1);
-
     // send address in reverse order: MSB first
     uint32_t addr = ficlStackPopUnsigned(vm->dataStack);
     uint8_t buf;
@@ -140,15 +138,15 @@ static void xc_at(ficlVm *vm) {
     buf = addr;
     write(port_fd, &buf, 1);
 
-    read(port_fd, &buf, 1);
+    // command byte
+    write(port_fd, &ReadByte, 1);
 
+    read(port_fd, &buf, 1);
     ficlStackPushUnsigned(vm->dataStack, buf);
 }
 
 /// xc! ( c a -- )
 static void xc_store(ficlVm *vm) {
-    write(port_fd, &WriteByte, 1);
-
     // send address in reverse order: MSB first
     uint32_t addr = ficlStackPopUnsigned(vm->dataStack);
     uint8_t buf;
@@ -157,6 +155,9 @@ static void xc_store(ficlVm *vm) {
     write(port_fd, &buf, 1);
     buf = addr;
     write(port_fd, &buf, 1);
+
+    // command byte
+    write(port_fd, &WriteByte, 1);
 
     // send byte
     buf = ficlStackPopUnsigned(vm->dataStack);
@@ -165,8 +166,6 @@ static void xc_store(ficlVm *vm) {
 
 /// xcall ( a -- )
 static void xc_call(ficlVm *vm) {
-    write(port_fd, &CallAddr, 1);
-
     // send address in reverse order: MSB first
     uint32_t addr = ficlStackPopUnsigned(vm->dataStack);
     uint8_t buf;
@@ -175,6 +174,10 @@ static void xc_call(ficlVm *vm) {
     write(port_fd, &buf, 1);
     buf = addr;
     write(port_fd, &buf, 1);
+
+    // command byte
+    write(port_fd, &CallAddr, 1);
+
 }
 
 //////////////////////////////////////
