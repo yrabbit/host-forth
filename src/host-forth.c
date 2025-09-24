@@ -242,6 +242,9 @@ int main(int argc, char *argv[]) {
     printf("ok> ");
     while (1) {
         gets_s(buf, sizeof(buf) - 1);
+        if (feof(stdin)) {
+            break;
+        }
         FICL_STRING_SET_FROM_CSTRING(forth_string, buf);
         if (FICL_VM_STATUS_USER_EXIT == ficlVmExecuteString(vm, forth_string)) {
             break;
