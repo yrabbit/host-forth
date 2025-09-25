@@ -100,24 +100,19 @@ int open_port(char const *device, int baudrate) {
         perror("Unable to open port - ");
         return(port_fd);
     }
-    fcntl(port_fd, F_SETFL, 0);
 
     struct termios options;
     tcgetattr(port_fd, &options);
+    cfmakeraw(&options); // Raw mode
     cfsetispeed(&options, B115200);
     cfsetospeed(&options, B115200);
-    options.c_cflag |= (CLOCAL | CREAD);
-
-    options.c_cflag &= ~CSIZE; /* Mask the character size bits */
-    options.c_cflag |= CS8;    /* Select 8 data bits */
-    options.c_cflag &= ~PARENB;
-    options.c_cflag &= ~CSTOPB;
-    options.c_oflag &= ~OPOST;
-    options.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG);
-    options.c_iflag &= ~(IXOFF | IXON | IXANY | IEXTEN);
-    options.c_oflag &= ~(IXOFF | IXON | IXANY | IEXTEN);
-
+    options.c_cflag &= ~CRTSCTS;
+    // disable flow control
+    options.c_iflag &= ~(IXON | IXOFF | IXANY);
     tcsetattr(port_fd, TCSANOW, &options);
+
+    // blocking read
+    fcntl(port_fd, F_SETFL, 0);
     return(port_fd);
 }
 

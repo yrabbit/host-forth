@@ -127,7 +127,7 @@ s" femtorv32_quark_ff.v" write-name
 catalog>next dup ramdisk-set-address 
 
 s" 2025-09-25 00:12:07" write-date 954 write-size 40405 write-address 
-s" Device Misc Info.txt" write-name
+s" Device Info.txt" write-name
 
 catalog>next ramdisk-set-address 0 ramdisk-write
 
