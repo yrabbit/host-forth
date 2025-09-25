@@ -114,6 +114,7 @@ int open_port(char const *device, int baudrate) {
     options.c_cflag &= ~CSTOPB;
     options.c_oflag &= ~OPOST;
     options.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG);
+    options.c_iflag &= ~(IXOFF | IXON);
 
     tcsetattr(port_fd, TCSANOW, &options);
     return(port_fd);
@@ -218,6 +219,9 @@ int main(int argc, char *argv[]) {
     ficlDictionarySetPrimitive(dict, "xc@", xc_at, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dict, "xc!", xc_store, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dict, "xcall", xc_call, FICL_WORD_DEFAULT);
+    ficlDictionarySetConstant(dict, "ramd-data-port", 0x4200);
+    ficlDictionarySetConstant(dict, "ramd-addr-vars", 0x54);
+    ficlDictionarySetConstant(dict, "ramd-set-addr-sub", 0x5c);
     ficlVm* vm = ficlSystemCreateVm(sys);
 
     char buf[256];
@@ -227,12 +231,16 @@ int main(int argc, char *argv[]) {
         sid.i = 1;
         vm->sourceId = sid;
         FILE *f = fopen(filename, "rt");
-        while (!feof(f)) {
-            fgets(buf, sizeof(buf) - 1, f);
-            FICL_STRING_SET_FROM_CSTRING(forth_string, buf);
-            ficlVmExecuteString(vm, forth_string);
+        if (!f) {
+            printf("Can't open %s\n", filename);
+        } else {
+            while (!feof(f)) {
+                fgets(buf, sizeof(buf) - 1, f);
+                FICL_STRING_SET_FROM_CSTRING(forth_string, buf);
+                ficlVmExecuteString(vm, forth_string);
+            }
+            fclose(f);
         }
-        fclose(f);
     }
 
     ficlCell sid;
