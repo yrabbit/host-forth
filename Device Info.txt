@@ -1,0 +1,24 @@
+FemtoRV32 Instruction set: RV32I + RDCYCLES
+Bruno Levy, Matthias Koch, 2020-2021
+
+
+Gowin 'GW5A-LV25MG121NES' aka Sipeed TangPrimer25k
+
+Device utilisation:
+                   VCC:       1/      1   100%
+                   IOB:       6/    222     2%
+                  LUT4:    4276/  23040    18%
+             MUX2_LUT5:    1024/  11520     8%
+             MUX2_LUT6:      94/   5760     1%
+             MUX2_LUT7:      25/   2880     0%
+             MUX2_LUT8:       3/   2880     0%
+                   ALU:     202/  17280     1%
+                   GND:       1/      1   100%
+                   DFF:    2452/  23040    10%
+                 BSRAM:      25/     56    44%
+                   GSR:       1/      1   100%
+                PINCFG:       1/      1   100%
+                  OSCA:       0/      1     0%
+                  PLLA:       0/      6     0%
+                  BUFG:       0/     18     0%
+                   DCS:       0/      8     0%
