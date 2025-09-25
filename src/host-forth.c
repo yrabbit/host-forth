@@ -114,7 +114,8 @@ int open_port(char const *device, int baudrate) {
     options.c_cflag &= ~CSTOPB;
     options.c_oflag &= ~OPOST;
     options.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG);
-    options.c_iflag &= ~(IXOFF | IXON);
+    options.c_iflag &= ~(IXOFF | IXON | IXANY | IEXTEN);
+    options.c_oflag &= ~(IXOFF | IXON | IXANY | IEXTEN);
 
     tcsetattr(port_fd, TCSANOW, &options);
     return(port_fd);

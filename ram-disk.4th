@@ -112,17 +112,22 @@ decimal
 decimal
 \ sizes and addresses are hardcoded, sorry :(
 \ make catalog
+
 0 dup ramdisk-set-address
-s" 2025-09-24 07:38:02" write-date 3819 write-size 277 write-address 
+s" 2025-09-24 07:38:02" write-date 3819 write-size 369 write-address 
 s" ram-disk.4th" write-name
 catalog>next dup ramdisk-set-address 
 
-s" 1991-07-30 12:01:03" write-date 19617 write-size 4096 write-address 
+s" 1991-07-30 12:01:03" write-date 19617 write-size 4188 write-address 
 s" A 3-instruction Forth for embedded systems work.txt" write-name
 catalog>next dup ramdisk-set-address 
 
-s" 2025-08-28 12:43:00" write-date 16600 write-size 23713 write-address 
+s" 2025-08-28 12:43:00" write-date 16600 write-size 23805 write-address 
 s" femtorv32_quark_ff.v" write-name
+catalog>next dup ramdisk-set-address 
+
+s" 2025-09-25 00:12:07" write-date 954 write-size 40405 write-address 
+s" Device Misc Info.txt" write-name
 
 catalog>next ramdisk-set-address 0 ramdisk-write
 
@@ -139,11 +144,13 @@ create file-buf file-buf-len chars allot
     0< until drop drop ;
 
 \ read files
-277 ramdisk-set-address 3819
+369 ramdisk-set-address 3819
 s" ram-disk.4th" r/o bin open-file drop fread
-4096 ramdisk-set-address 19617
+4188 ramdisk-set-address 19617
 s" A 3-instruction Forth for embedded systems work.txt" r/o bin open-file drop fread
-23713 ramdisk-set-address 16600
+23805 ramdisk-set-address 16600
 s" femtorv32_quark_ff.v" r/o bin open-file drop fread
+40405 ramdisk-set-address 954
+s" Device Info.txt" r/o bin open-file drop fread
 
 \ vim: set et sw=4 ts=4:
